@@ -35,7 +35,7 @@
 | 🔭 [**hv-analysis（横纵分析法）**](#-hv-analysis横纵分析法) | 想搞懂一个产品/公司/概念是怎么回事，丢给它，给你一份万字 PDF 研究报告 | [公众号文章](https://mp.weixin.qq.com/s/Y_uRMYBmdLWUPnz_ac7jWA) |
 | ✍️ [**khazix-writer（卡兹克写作）**](#-khazix-writer卡兹克写作) | 装上之后，Agent 用我的口吻和节奏写公众号长文 | [公众号文章](https://mp.weixin.qq.com/s/AtxGrii_K-nzkwUM9SNhEg) |
 | 🔥 [**aihot（AI HOT 资讯查询）**](#-aihotai-hot-资讯查询) | 让 Agent 用一句话拿到 aihot.virxact.com 每天的 AI HOT 日报和全部 AI 动态，无需 API Key | [aihot.virxact.com](https://aihot.virxact.com) |
-| 💽 [**storage-analyzer（存储分析）**](#-storage-analyzer存储分析) | 一句话扫描 Mac / Windows 整机磁盘，三色分级给清理决策，网页上一键移废纸篓 | 公众号文章（即将发布） |
+| 💽 [**storage-analyzer（清理垃圾）**](#-storage-analyzer清理垃圾) | 一句话扫描 Mac / Windows 整机磁盘，三色分级给清理决策，网页上一键移废纸篓 | 公众号文章（即将发布） |
 
 ### Prompts
 
@@ -209,7 +209,7 @@ curl -fsSL https://aihot.virxact.com/aihot-skill/install.sh | bash
 <table>
 <tr><td>
 
-### 💽 storage-analyzer（存储分析）
+### 💽 storage-analyzer（清理垃圾）
 
 > *"清 Mac 垃圾这件事，过去十几年都靠 CleanMyMac 这种翻译层软件。现在一个 skill 就够了。"*
 
