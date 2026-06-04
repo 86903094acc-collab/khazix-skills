@@ -27,12 +27,12 @@
 
 | 名字 | 一句话 | 讲解 |
 |---|---|---|
+| 🛡️ [**vibeguard（补天）**](#-vibeguard补天) | 一句"扫一下项目安全"，本地查依赖漏洞、硬编码密钥、`.env` 误提交，产出只读 HTML + Markdown 审计报告 | — |
+| 💽 [**storage-analyzer（清理垃圾）**](#-storage-analyzer清理垃圾) | 一句话扫描 Mac / Windows 整机磁盘，三色分级给清理决策，网页上一键移废纸篓 | [公众号文章](https://mp.weixin.qq.com/s/NyOMIlOD986OC4SI9vmxlA) |
+| 🔥 [**aihot（AI HOT 资讯查询）**](#-aihotai-hot-资讯查询) | 让 Agent 用一句话拿到 aihot.virxact.com 每天的 AI HOT 日报和全部 AI 动态，无需 API Key | [aihot.virxact.com](https://aihot.virxact.com) |
 | 🧹 [**neat-freak（洁癖）**](#-neat-freak洁癖) | 干完活跑一下 `/neat`，自动把你这次改的东西跟项目文档、CLAUDE.md、Agent 记忆全部对齐 | [公众号文章](https://mp.weixin.qq.com/s/tg1wd-iN2gWHWhXdY0faeg) |
 | 🔭 [**hv-analysis（横纵分析法）**](#-hv-analysis横纵分析法) | 想搞懂一个产品/公司/概念是怎么回事，丢给它，给你一份万字 PDF 研究报告 | [公众号文章](https://mp.weixin.qq.com/s/Y_uRMYBmdLWUPnz_ac7jWA) |
 | ✍️ [**khazix-writer（卡兹克写作）**](#-khazix-writer卡兹克写作) | 装上之后，Agent 用我的口吻和节奏写公众号长文 | [公众号文章](https://mp.weixin.qq.com/s/AtxGrii_K-nzkwUM9SNhEg) |
-| 🔥 [**aihot（AI HOT 资讯查询）**](#-aihotai-hot-资讯查询) | 让 Agent 用一句话拿到 aihot.virxact.com 每天的 AI HOT 日报和全部 AI 动态，无需 API Key | [aihot.virxact.com](https://aihot.virxact.com) |
-| 💽 [**storage-analyzer（清理垃圾）**](#-storage-analyzer清理垃圾) | 一句话扫描 Mac / Windows 整机磁盘，三色分级给清理决策，网页上一键移废纸篓 | [公众号文章](https://mp.weixin.qq.com/s/NyOMIlOD986OC4SI9vmxlA) |
-| 🛡️ [**vibeguard（补天）**](#-vibeguard补天) | 一句"扫一下项目安全"，本地查依赖漏洞、硬编码密钥、`.env` 误提交，产出只读 HTML + Markdown 审计报告 | — |
 
 ---
 
@@ -51,6 +51,123 @@
 ## ✨ Skills
 
 <a id="-skills"></a>
+
+<table>
+<tr><td>
+
+### 🛡️ vibeguard（补天）
+
+> *"上线前花两分钟自己扫一遍，比上线后被别人扫一遍强。"*
+
+随口跟 Agent 说一句"帮我看看项目有没有安全问题"或"扫一下依赖漏洞"，它会在**本地**把你的项目过一遍，最后产出一份**只读 HTML 报告 + Markdown 审计报告**。报告面向产品经理、项目负责人这类非安全背景的人写，讲清楚"是否影响发布、要不要马上排期、需要研发/运维确认什么"。
+
+**它会查什么**
+
+- **依赖漏洞** — 从 lockfile 提取依赖，逐个查已知漏洞（CVE / GHSA），按严重度排序
+- **硬编码密钥** — 扫代码里写死的 API Key / token / 密码，报告只给脱敏预览，不泄露完整密钥
+- **敏感文件误提交** — `.env`、私钥、证书是不是被 git 跟踪了
+- **仓库卫生** — `.gitignore` 该挡的有没有挡住
+- **过期依赖** — 给升级建议，但不会把"过期"夸大成"有漏洞"
+
+支持 JavaScript / TypeScript、Python、Go、Rust。
+
+**它的边界（很重要）**
+
+它解决的是**依赖和仓库卫生**这一层的安全问题，不能替代代码审计、渗透测试或部署安全评估——业务逻辑、权限、SQL 注入、XSS 这些代码层风险，仍然得单独复核。报告里会反复强调这点，不制造恐慌，也不给你虚假的安全感。
+
+**两条铁律**
+
+- **全程只读，绝不擅自动手。** 扫描只读文件、调漏洞 API，不碰你的源码和依赖；网页报告也只用来读，没有任何会触发本地操作的按钮
+- **修复要你点头。** 看完报告，你在对话里说一句"可以修 / 修复 / OK"，Agent 才会动手升级或清理
+
+**🌐 跨平台**：Claude Code · Codex · OpenCode · OpenClaw
+
+→ [SKILL.md](./vibeguard/SKILL.md)
+
+</td></tr>
+</table>
+
+<table>
+<tr><td>
+
+### 💽 storage-analyzer（清理垃圾）
+
+> *"清 Mac 垃圾这件事，过去十几年都靠 CleanMyMac 这种翻译层软件。现在一个 skill 就够了。"*
+
+随口跟 Agent 说一句"帮我看看存储"或"C 盘满了"，它会扫一遍整机磁盘，在浏览器里打开一份**交互式 HTML 报告**：磁盘总览、占用 Top 5、清理优先级、🟢🟡🔴 三色分级清单。命令一键复制，也可以直接点按钮移到废纸篓 / 删除（每次都有二次确认弹窗）。
+
+**它和 CleanMyMac 的区别**
+
+CleanMyMac 是个写死规则的软件，扫到一个 3.8G 的 Chrome 文件夹只会告诉你"用户缓存文件，可删"——但你不知道里面到底是什么、删了哪些网站要重新登录。
+
+这个 skill 由 Agent 驱动，每一项都给你**具体路径 + 类型说明 + 删了的影响 + 推荐处置方式**。比如那 97 GB 的 UUID Container 它会告诉你是 B 站离线视频缓存、建议在 B 站客户端里清而不是手删。
+
+**三色分级是核心**
+
+- 🟢 **绿灯** — 纯缓存、临时文件，删了自动再生。可以让 Agent 一键清
+- 🟡 **黄灯** — 含用户数据（离线视频、下载、项目代码）。只给"在访达打开"和"移废纸篓"，让你自己决定，不给直接删
+- 🔴 **红灯** — 运行中应用核心数据、系统文件。解释为什么不能动，最多给"打开文件夹"，永远不给删除按钮
+
+**铁律**
+
+全程只读扫描，绝不擅自动手。删除操作必须你在浏览器上点按钮 + 浏览器弹框二次确认才执行。本地服务跑在 127.0.0.1 + 随机端口 + token，安全模型上三套白名单分级（绿灯能删、橙灯只能移废纸篓、红灯只能打开）。
+
+**🌐 跨平台**：macOS 完整实测；Windows 代码就绪（多盘符已支持），首次用建议留个心眼
+
+**怎么触发**
+
+```
+帮我看看存储
+C 盘满了
+清理一下磁盘
+看下电脑空间
+storage analysis
+```
+
+→ [SKILL.md](./storage-analyzer/SKILL.md) · [公众号讲解](https://mp.weixin.qq.com/s/NyOMIlOD986OC4SI9vmxlA)
+
+</td></tr>
+</table>
+
+<table>
+<tr><td>
+
+### 🔥 aihot（AI HOT 资讯查询）
+
+> *"AI 圈一天发太多东西，等我反应过来已经过气了——干脆让 Agent 帮我每天扫一遍。"*
+
+让支持 SKILL.md 的 Agent 用最自然的中文一句话拿到 [aihot.virxact.com](https://aihot.virxact.com) 每天的 AI HOT 日报和全部 AI 动态。无需 API Key、无需配 MCP server。
+
+**它能做什么**
+
+- 拉今日 / 指定日期的 AI HOT 日报（按主题打包好的成品）
+- 拉精选条目流（每日精编候选池）
+- 按分类拉条目（模型 / 产品 / 行业 / 论文 / 技巧）
+- 按时间窗口拉（最近 N 天）
+- 关键词 / 公司 / 主题搜索（"OpenAI 最近发的"、"Sora 相关"、"RAG 论文"）
+
+**怎么触发**
+
+```
+今天 AI 圈有什么新东西
+看一下 5 月 6 号的 AI 日报
+最近一周的 AI 论文
+看下精选条目
+最近 OpenAI 有什么发布
+```
+
+**🌐 跨平台**：Claude Code · Codex CLI · Cursor · Gemini CLI · OpenCode · Cline · Windsurf
+
+**🇨🇳 国内直链**（无需翻墙）：
+
+```
+curl -fsSL https://aihot.virxact.com/aihot-skill/install.sh | bash
+```
+
+→ [SKILL.md](./aihot/SKILL.md) · [aihot.virxact.com](https://aihot.virxact.com) · [接入指南](https://aihot.virxact.com/agent)
+
+</td></tr>
+</table>
 
 <table>
 <tr><td>
@@ -153,123 +270,6 @@ sync up          # English
 [![Tessl](https://img.shields.io/badge/Tessl-0.1.1-3B82F6?style=flat-square)](https://tessl.io/registry/khazix-skills/khazix-writer)
 
 → [SKILL.md](./khazix-writer/SKILL.md) · [公众号讲解](https://mp.weixin.qq.com/s/AtxGrii_K-nzkwUM9SNhEg)
-
-</td></tr>
-</table>
-
-<table>
-<tr><td>
-
-### 🔥 aihot（AI HOT 资讯查询）
-
-> *"AI 圈一天发太多东西，等我反应过来已经过气了——干脆让 Agent 帮我每天扫一遍。"*
-
-让支持 SKILL.md 的 Agent 用最自然的中文一句话拿到 [aihot.virxact.com](https://aihot.virxact.com) 每天的 AI HOT 日报和全部 AI 动态。无需 API Key、无需配 MCP server。
-
-**它能做什么**
-
-- 拉今日 / 指定日期的 AI HOT 日报（按主题打包好的成品）
-- 拉精选条目流（每日精编候选池）
-- 按分类拉条目（模型 / 产品 / 行业 / 论文 / 技巧）
-- 按时间窗口拉（最近 N 天）
-- 关键词 / 公司 / 主题搜索（"OpenAI 最近发的"、"Sora 相关"、"RAG 论文"）
-
-**怎么触发**
-
-```
-今天 AI 圈有什么新东西
-看一下 5 月 6 号的 AI 日报
-最近一周的 AI 论文
-看下精选条目
-最近 OpenAI 有什么发布
-```
-
-**🌐 跨平台**：Claude Code · Codex CLI · Cursor · Gemini CLI · OpenCode · Cline · Windsurf
-
-**🇨🇳 国内直链**（无需翻墙）：
-
-```
-curl -fsSL https://aihot.virxact.com/aihot-skill/install.sh | bash
-```
-
-→ [SKILL.md](./aihot/SKILL.md) · [aihot.virxact.com](https://aihot.virxact.com) · [接入指南](https://aihot.virxact.com/agent)
-
-</td></tr>
-</table>
-
-<table>
-<tr><td>
-
-### 💽 storage-analyzer（清理垃圾）
-
-> *"清 Mac 垃圾这件事，过去十几年都靠 CleanMyMac 这种翻译层软件。现在一个 skill 就够了。"*
-
-随口跟 Agent 说一句"帮我看看存储"或"C 盘满了"，它会扫一遍整机磁盘，在浏览器里打开一份**交互式 HTML 报告**：磁盘总览、占用 Top 5、清理优先级、🟢🟡🔴 三色分级清单。命令一键复制，也可以直接点按钮移到废纸篓 / 删除（每次都有二次确认弹窗）。
-
-**它和 CleanMyMac 的区别**
-
-CleanMyMac 是个写死规则的软件，扫到一个 3.8G 的 Chrome 文件夹只会告诉你"用户缓存文件，可删"——但你不知道里面到底是什么、删了哪些网站要重新登录。
-
-这个 skill 由 Agent 驱动，每一项都给你**具体路径 + 类型说明 + 删了的影响 + 推荐处置方式**。比如那 97 GB 的 UUID Container 它会告诉你是 B 站离线视频缓存、建议在 B 站客户端里清而不是手删。
-
-**三色分级是核心**
-
-- 🟢 **绿灯** — 纯缓存、临时文件，删了自动再生。可以让 Agent 一键清
-- 🟡 **黄灯** — 含用户数据（离线视频、下载、项目代码）。只给"在访达打开"和"移废纸篓"，让你自己决定，不给直接删
-- 🔴 **红灯** — 运行中应用核心数据、系统文件。解释为什么不能动，最多给"打开文件夹"，永远不给删除按钮
-
-**铁律**
-
-全程只读扫描，绝不擅自动手。删除操作必须你在浏览器上点按钮 + 浏览器弹框二次确认才执行。本地服务跑在 127.0.0.1 + 随机端口 + token，安全模型上三套白名单分级（绿灯能删、橙灯只能移废纸篓、红灯只能打开）。
-
-**🌐 跨平台**：macOS 完整实测；Windows 代码就绪（多盘符已支持），首次用建议留个心眼
-
-**怎么触发**
-
-```
-帮我看看存储
-C 盘满了
-清理一下磁盘
-看下电脑空间
-storage analysis
-```
-
-→ [SKILL.md](./storage-analyzer/SKILL.md) · [公众号讲解](https://mp.weixin.qq.com/s/NyOMIlOD986OC4SI9vmxlA)
-
-</td></tr>
-</table>
-
-<table>
-<tr><td>
-
-### 🛡️ vibeguard（补天）
-
-> *"上线前花两分钟自己扫一遍，比上线后被别人扫一遍强。"*
-
-随口跟 Agent 说一句"帮我看看项目有没有安全问题"或"扫一下依赖漏洞"，它会在**本地**把你的项目过一遍，最后产出一份**只读 HTML 报告 + Markdown 审计报告**。报告面向产品经理、项目负责人这类非安全背景的人写，讲清楚"是否影响发布、要不要马上排期、需要研发/运维确认什么"。
-
-**它会查什么**
-
-- **依赖漏洞** — 从 lockfile 提取依赖，逐个查已知漏洞（CVE / GHSA），按严重度排序
-- **硬编码密钥** — 扫代码里写死的 API Key / token / 密码，报告只给脱敏预览，不泄露完整密钥
-- **敏感文件误提交** — `.env`、私钥、证书是不是被 git 跟踪了
-- **仓库卫生** — `.gitignore` 该挡的有没有挡住
-- **过期依赖** — 给升级建议，但不会把"过期"夸大成"有漏洞"
-
-支持 JavaScript / TypeScript、Python、Go、Rust。
-
-**它的边界（很重要）**
-
-它解决的是**依赖和仓库卫生**这一层的安全问题，不能替代代码审计、渗透测试或部署安全评估——业务逻辑、权限、SQL 注入、XSS 这些代码层风险，仍然得单独复核。报告里会反复强调这点，不制造恐慌，也不给你虚假的安全感。
-
-**两条铁律**
-
-- **全程只读，绝不擅自动手。** 扫描只读文件、调漏洞 API，不碰你的源码和依赖；网页报告也只用来读，没有任何会触发本地操作的按钮
-- **修复要你点头。** 看完报告，你在对话里说一句"可以修 / 修复 / OK"，Agent 才会动手升级或清理
-
-**🌐 跨平台**：Claude Code · Codex · OpenCode · OpenClaw
-
-→ [SKILL.md](./vibeguard/SKILL.md)
 
 </td></tr>
 </table>

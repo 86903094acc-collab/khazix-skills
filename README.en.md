@@ -27,12 +27,12 @@ Every skill here is a structured instruction set that agents load directly. Foll
 
 | Name | One-liner | Article |
 |---|---|---|
-| 🧹 [**neat-freak**](#-neat-freak) | After a session, run `/neat` to reconcile your project docs, CLAUDE.md, and agent memory with the code | [Article (Chinese)](https://mp.weixin.qq.com/s/tg1wd-iN2gWHWhXdY0faeg) |
-| 🔭 [**hv-analysis**](#-hv-analysis) | Drop a product/company/concept into it and get a 10k–30k word PDF research report | [Article (Chinese)](https://mp.weixin.qq.com/s/Y_uRMYBmdLWUPnz_ac7jWA) |
-| ✍️ [**khazix-writer**](#-khazix-writer) | Makes the agent write long-form Chinese articles in my personal voice | [Article (Chinese)](https://mp.weixin.qq.com/s/AtxGrii_K-nzkwUM9SNhEg) |
-| 🔥 [**aihot**](#-aihot-ai-hot-news-query) | Lets your agent pull AI HOT's daily report and all AI news from aihot.virxact.com with one Chinese sentence — no API key | [aihot.virxact.com](https://aihot.virxact.com) |
-| 💽 [**storage-analyzer**](#-storage-analyzer) | One sentence to scan your whole Mac / Windows drive — three-tier cleanup plan, one-click trash from the browser | [Article (Chinese)](https://mp.weixin.qq.com/s/NyOMIlOD986OC4SI9vmxlA) |
 | 🛡️ [**vibeguard**](#-vibeguard) | One sentence — "scan this project for security issues" — for local dependency-vuln, hardcoded-secret, and committed-`.env` checks, with a read-only HTML + Markdown report | — |
+| 💽 [**storage-analyzer**](#-storage-analyzer) | One sentence to scan your whole Mac / Windows drive — three-tier cleanup plan, one-click trash from the browser | [Article (Chinese)](https://mp.weixin.qq.com/s/NyOMIlOD986OC4SI9vmxlA) |
+| 🔥 [**aihot**](#-aihot-ai-hot-news-query) | Lets your agent pull AI HOT's daily report and all AI news from aihot.virxact.com with one Chinese sentence — no API key | [aihot.virxact.com](https://aihot.virxact.com) |
+| 🧹 [**neat-freak**](#-neat-freak) | After a session, run `/neat` to reconcile your project docs, CLAUDE.md, and agent memory with the code | [Article (Chinese)](https://mp.weixin.qq.com/s/tg1wd-iN2gWHWhXdY0faeg) |
+| 🔭 [**hv-analysis**](#-hv-analysis-horizontal-vertical-analysis) | Drop a product/company/concept into it and get a 10k–30k word PDF research report | [Article (Chinese)](https://mp.weixin.qq.com/s/Y_uRMYBmdLWUPnz_ac7jWA) |
+| ✍️ [**khazix-writer**](#-khazix-writer) | Makes the agent write long-form Chinese articles in my personal voice | [Article (Chinese)](https://mp.weixin.qq.com/s/AtxGrii_K-nzkwUM9SNhEg) |
 
 ---
 
@@ -51,6 +51,123 @@ Replace `<skill-name>` with the one you want — e.g. `neat-freak`, `hv-analysis
 ## ✨ Skills
 
 <a id="-skills"></a>
+
+<table>
+<tr><td>
+
+### 🛡️ vibeguard
+
+> *"Two minutes scanning before you ship beats getting scanned after."*
+
+Tell your agent "check this project for security issues" or "scan for dependency vulnerabilities" and it runs a **local** pass over your repo, then produces a **read-only HTML report + a Markdown audit report**. The report is written for product managers and project leads — non-security readers — and answers "does this block the release, do we need to schedule it now, what do engineering/ops need to confirm".
+
+**What it checks**
+
+- **Dependency vulnerabilities** — extracts deps from your lockfile, checks each against known advisories (CVE / GHSA), sorted by severity
+- **Hardcoded secrets** — API keys / tokens / passwords baked into code; the report only shows a redacted preview, never the full secret
+- **Sensitive files in git** — whether `.env`, private keys, or certs are being tracked
+- **Repo hygiene** — whether `.gitignore` covers what it should
+- **Outdated deps** — upgrade suggestions, without ever inflating "outdated" into "vulnerable"
+
+Supports JavaScript / TypeScript, Python, Go, Rust.
+
+**Its boundary (important)**
+
+It covers the **dependency and repo-hygiene** layer of security. It does not replace code audits, penetration testing, or deployment security review — business logic, access control, SQL injection, XSS still need separate review. The report says this repeatedly: no fear-mongering, no false sense of safety.
+
+**Two hard rules**
+
+- **Read-only, always.** Scanning only reads files and calls the vuln API — it never touches your source or dependencies, and the HTML report is for reading only, with no buttons that trigger local actions
+- **Fixes need your nod.** After you read the report, say "fix it / OK" in chat before the agent upgrades or cleans anything
+
+**🌐 Cross-platform**: Claude Code · Codex · OpenCode · OpenClaw
+
+→ [SKILL.md](./vibeguard/SKILL.md)
+
+</td></tr>
+</table>
+
+<table>
+<tr><td>
+
+### 💽 storage-analyzer
+
+> *"Cleaning Mac junk has been a CleanMyMac job for a decade. Now a single skill replaces it."*
+
+Tell your agent something like "check my storage" or "C: drive is full". It scans your whole disk and opens an **interactive HTML report** in your browser: disk overview, top 5 space hogs, prioritized cleanup, and a 🟢🟡🔴 three-tier list. Every command is one-click-copy; you can also click buttons to move to Trash / delete (always with a second confirmation dialog).
+
+**Why it beats CleanMyMac**
+
+CleanMyMac is a hard-coded program. It'll show you a 3.8 GB Chrome folder labeled "user cache, safe to delete" — but you don't know what's actually inside, which sites you'll log out of, which offline data will be gone.
+
+This skill is agent-driven. Every entry comes with **specific path + content classification + impact of deletion + recommended action**. That mysterious 97 GB UUID Container? It'll tell you it's the Bilibili offline video cache and suggest you clean it through the Bilibili app, not by hand.
+
+**Three-tier classification is the core**
+
+- 🟢 **Green** — Pure caches, temp files. Regenerate automatically. Safe for one-click cleanup
+- 🟡 **Yellow** — Contains user data (offline videos, downloads, project code). Only "Open in Finder" and (where safe) "Move to Trash". You decide
+- 🔴 **Red** — Running app core data, system files. Explains why not to touch, gives at most "Open folder". Never a delete button
+
+**Hard rules**
+
+Scan phase is **read-only**, period. Deletions require **two clicks** — button on the page, then a browser confirm dialog. The local server runs on 127.0.0.1 + random port + token, with three whitelists (green = can rm; yellow = trash only; both = open).
+
+**🌐 Cross-platform**: macOS fully tested; Windows code-ready (multi-drive supported), worth eyeballing on first run
+
+**How to trigger**
+
+```
+check my storage
+C drive is full
+clean up disk
+storage analysis
+帮我看看存储
+```
+
+→ [SKILL.md](./storage-analyzer/SKILL.md) · [Article (Chinese)](https://mp.weixin.qq.com/s/NyOMIlOD986OC4SI9vmxlA)
+
+</td></tr>
+</table>
+
+<table>
+<tr><td>
+
+### 🔥 aihot (AI HOT news query)
+
+> *"The AI world ships too much in a day. By the time I notice, it's already old news — let an agent scan it for me."*
+
+Lets any SKILL.md-supporting agent pull AI HOT's daily report and all AI news from [aihot.virxact.com](https://aihot.virxact.com) with one natural Chinese sentence. No API key, no MCP server config.
+
+**What it can do**
+
+- Pull today's or a specific date's AI HOT daily report (pre-packaged by topic)
+- Pull the selected items stream (daily editorial candidate pool)
+- Pull by category (models / products / industry / papers / tips)
+- Pull by time window (last N days)
+- Keyword / company / topic search ("recent OpenAI releases", "Sora-related", "RAG papers")
+
+**How to trigger** (Chinese — the underlying API is Chinese-curated)
+
+```
+今天 AI 圈有什么新东西
+看一下 5 月 6 号的 AI 日报
+最近一周的 AI 论文
+看下精选条目
+最近 OpenAI 有什么发布
+```
+
+**🌐 Cross-platform**: Claude Code · Codex CLI · Cursor · Gemini CLI · OpenCode · Cline · Windsurf
+
+**🇨🇳 China-friendly direct install** (no GitHub access needed):
+
+```
+curl -fsSL https://aihot.virxact.com/aihot-skill/install.sh | bash
+```
+
+→ [SKILL.md](./aihot/SKILL.md) · [aihot.virxact.com](https://aihot.virxact.com) · [Integration guide](https://aihot.virxact.com/agent)
+
+</td></tr>
+</table>
 
 <table>
 <tr><td>
@@ -155,123 +272,6 @@ You want "good general writing." This skill takes a position. It **refuses** cor
 [![Tessl](https://img.shields.io/badge/Tessl-0.1.1-3B82F6?style=flat-square)](https://tessl.io/registry/khazix-skills/khazix-writer)
 
 → [SKILL.md](./khazix-writer/SKILL.md) · [Article (Chinese)](https://mp.weixin.qq.com/s/AtxGrii_K-nzkwUM9SNhEg)
-
-</td></tr>
-</table>
-
-<table>
-<tr><td>
-
-### 🔥 aihot (AI HOT news query)
-
-> *"The AI world ships too much in a day. By the time I notice, it's already old news — let an agent scan it for me."*
-
-Lets any SKILL.md-supporting agent pull AI HOT's daily report and all AI news from [aihot.virxact.com](https://aihot.virxact.com) with one natural Chinese sentence. No API key, no MCP server config.
-
-**What it can do**
-
-- Pull today's or a specific date's AI HOT daily report (pre-packaged by topic)
-- Pull the selected items stream (daily editorial candidate pool)
-- Pull by category (models / products / industry / papers / tips)
-- Pull by time window (last N days)
-- Keyword / company / topic search ("recent OpenAI releases", "Sora-related", "RAG papers")
-
-**How to trigger** (Chinese — the underlying API is Chinese-curated)
-
-```
-今天 AI 圈有什么新东西
-看一下 5 月 6 号的 AI 日报
-最近一周的 AI 论文
-看下精选条目
-最近 OpenAI 有什么发布
-```
-
-**🌐 Cross-platform**: Claude Code · Codex CLI · Cursor · Gemini CLI · OpenCode · Cline · Windsurf
-
-**🇨🇳 China-friendly direct install** (no GitHub access needed):
-
-```
-curl -fsSL https://aihot.virxact.com/aihot-skill/install.sh | bash
-```
-
-→ [SKILL.md](./aihot/SKILL.md) · [aihot.virxact.com](https://aihot.virxact.com) · [Integration guide](https://aihot.virxact.com/agent)
-
-</td></tr>
-</table>
-
-<table>
-<tr><td>
-
-### 💽 storage-analyzer
-
-> *"Cleaning Mac junk has been a CleanMyMac job for a decade. Now a single skill replaces it."*
-
-Tell your agent something like "check my storage" or "C: drive is full". It scans your whole disk and opens an **interactive HTML report** in your browser: disk overview, top 5 space hogs, prioritized cleanup, and a 🟢🟡🔴 three-tier list. Every command is one-click-copy; you can also click buttons to move to Trash / delete (always with a second confirmation dialog).
-
-**Why it beats CleanMyMac**
-
-CleanMyMac is a hard-coded program. It'll show you a 3.8 GB Chrome folder labeled "user cache, safe to delete" — but you don't know what's actually inside, which sites you'll log out of, which offline data will be gone.
-
-This skill is agent-driven. Every entry comes with **specific path + content classification + impact of deletion + recommended action**. That mysterious 97 GB UUID Container? It'll tell you it's the Bilibili offline video cache and suggest you clean it through the Bilibili app, not by hand.
-
-**Three-tier classification is the core**
-
-- 🟢 **Green** — Pure caches, temp files. Regenerate automatically. Safe for one-click cleanup
-- 🟡 **Yellow** — Contains user data (offline videos, downloads, project code). Only "Open in Finder" and (where safe) "Move to Trash". You decide
-- 🔴 **Red** — Running app core data, system files. Explains why not to touch, gives at most "Open folder". Never a delete button
-
-**Hard rules**
-
-Scan phase is **read-only**, period. Deletions require **two clicks** — button on the page, then a browser confirm dialog. The local server runs on 127.0.0.1 + random port + token, with three whitelists (green = can rm; yellow = trash only; both = open).
-
-**🌐 Cross-platform**: macOS fully tested; Windows code-ready (multi-drive supported), worth eyeballing on first run
-
-**How to trigger**
-
-```
-check my storage
-C drive is full
-clean up disk
-storage analysis
-帮我看看存储
-```
-
-→ [SKILL.md](./storage-analyzer/SKILL.md) · [Article (Chinese)](https://mp.weixin.qq.com/s/NyOMIlOD986OC4SI9vmxlA)
-
-</td></tr>
-</table>
-
-<table>
-<tr><td>
-
-### 🛡️ vibeguard
-
-> *"Two minutes scanning before you ship beats getting scanned after."*
-
-Tell your agent "check this project for security issues" or "scan for dependency vulnerabilities" and it runs a **local** pass over your repo, then produces a **read-only HTML report + a Markdown audit report**. The report is written for product managers and project leads — non-security readers — and answers "does this block the release, do we need to schedule it now, what do engineering/ops need to confirm".
-
-**What it checks**
-
-- **Dependency vulnerabilities** — extracts deps from your lockfile, checks each against known advisories (CVE / GHSA), sorted by severity
-- **Hardcoded secrets** — API keys / tokens / passwords baked into code; the report only shows a redacted preview, never the full secret
-- **Sensitive files in git** — whether `.env`, private keys, or certs are being tracked
-- **Repo hygiene** — whether `.gitignore` covers what it should
-- **Outdated deps** — upgrade suggestions, without ever inflating "outdated" into "vulnerable"
-
-Supports JavaScript / TypeScript, Python, Go, Rust.
-
-**Its boundary (important)**
-
-It covers the **dependency and repo-hygiene** layer of security. It does not replace code audits, penetration testing, or deployment security review — business logic, access control, SQL injection, XSS still need separate review. The report says this repeatedly: no fear-mongering, no false sense of safety.
-
-**Two hard rules**
-
-- **Read-only, always.** Scanning only reads files and calls the vuln API — it never touches your source or dependencies, and the HTML report is for reading only, with no buttons that trigger local actions
-- **Fixes need your nod.** After you read the report, say "fix it / OK" in chat before the agent upgrades or cleans anything
-
-**🌐 Cross-platform**: Claude Code · Codex · OpenCode · OpenClaw
-
-→ [SKILL.md](./vibeguard/SKILL.md)
 
 </td></tr>
 </table>
